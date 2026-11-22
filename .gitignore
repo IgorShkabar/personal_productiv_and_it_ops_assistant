@@ -2,4 +2,26 @@
 .env, 
 __pycache__/
 
+# Ignore all files in the .note/ directory
 .note/
+
+# Python virtual environment
+venv/
+.venv/
+env/
+
+# Python System Cache and IDE
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+
+# local settings for editors (VS Code and others)
+.vscode/
+.idea/
+
+# Temporary files of the OS (Linux / macOS / Windows)
+*~
+.DS_Store
+Thumbs.db

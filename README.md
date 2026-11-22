@@ -88,7 +88,7 @@ Bot: ### Workflow Summary
 Clone the repository and install the official Google GenAI SDK:
 
 ```bash
-git clone https://github.com
+git clone https://github.com/IgorShkabar/personal_productiv_and_it_ops_assistant
 cd personal_productiv_and_it_ops_assistant
 pip install google-genai
 ```

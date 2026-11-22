@@ -24,4 +24,4 @@ __pycache__/
 # Temporary files of the OS (Linux / macOS / Windows)
 *~
 .DS_Store
-Thumbs.db
+Thumbs.db.env

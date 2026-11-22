@@ -16,3 +16,4 @@
 ## Actions Taken
 - No high-CPU threshold alerts triggered (>80%).
 - High priority ticket not created as CPU utilization did not exceed 80%.
+  

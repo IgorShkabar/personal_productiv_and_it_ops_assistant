@@ -7,29 +7,11 @@ from google import genai
 from google.genai import types
 from google.genai import errors
 import datetime
+from ops_tools import check_server_health, create_ticket
 
 # DEFINE AUTOMATION TOOLS (Python Functions)
 
 # The AI reads the docstrings & type hints to understand WHEN & HOW to use these functions automatically.
-
-def check_server_health(server_name: str) -> str:
-    """ Checks the CPU, memory, and online status of a specific server.
-    Args:
-        server_name (str): The name or ID of the server to check (e.g. 'prod-db-01',  'web-main')
-    """
-
-    # Simmulated live infrastructure check
-    mock_servers = {
-        "prod-db-01": {"status": "ONLINE", "cpu": "78%", "memory": "64%"},
-        "web-main": {"status": "ONLINE", "cpu": "22%", "memory": "41%"},
-        "backup_node": {"status": "WARNING", "cpu": "95%", "memory": "89%"} 
-        
-    }
-    data = mock_servers.get(server_name.lower())
-
-    if not data:
-        return json.dumps({"error": f"Server '{server_name}' not found."})
-    return json.dumps({"server": server_name, **data})
 
 def create_automation_ticket(title: str, priority: str, description: str) -> str:
     """ Creates a new task or support ticket in the local tracking system.

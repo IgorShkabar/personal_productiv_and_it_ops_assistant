@@ -1,0 +1,84 @@
+personal_productiv_and_it_ops_assistant is my chat-bot.
+
+
+У меня установлено google-genai
+
+Отлично, всё заработало! 
+Мой AI-бот успешно инициализировался, подключился к окружению и теперь ждет моего ввода в терминале (You:
+
+прямо сейчас кликнуть на строку после You: в терминале VS Code, ввести тестовый запрос из подсказки (или свой собственный) и нажать Enter, чтобы проверить работу бота:
+
+	Check prod-db-01 and backup-node. If any server has CPU over 80%, open a HIGH priority ticket and save a report
+
+
+я в терминале VS Code в приглашении You: снова запустил You: Check prod-db-01 and backup-node. If any server has CPU over 80%, open a HIGH priority ticket and save a report   и Бот думает... 
+потому что выполняет последовательность шагов под капотом (Function Calling / Tool Use) и, возможно, ждет ответа API или делает паузы при повторах (time.sleep).
+
+
+Что именно сейчас происходит внутри бота?
+
+Мой скрипт построен по принципу AI-агента с инструментами (Tools). Когда пишу промпт:
+
+	Check prod-db-01 and backup-node. If any server has CPU over 80%, open a HIGH priority ticket and save a report
+	
+Модель Gemini получает ваш текст и список Python-функций, описанных в main.py (вероятно, что-то вроде check_server_metrics, create_ticket, save_report).
+
+Модель сама решает вызвать функцию проверки серверов prod-db-01 и backup-node.
+
+Python-код выполняет эту функцию, получает результат (скорее всего, сейчас там прописаны тестовые данные/заглушки) и отправляет их обратно в Gemini.
+
+Если на одном из серверов CPU > 80%, Gemini вызывает следующие инструменты: создание тикета (HIGH) и сохранение отчета (обычно в текстовый или .json/.md файл в папке проекта).
+
+Почему долго? Либо модель выполняет цепочку из 3–4 последовательных запросов к серверу Google, либо сработал цикл повторов при перегрузке (503).
+
+	Вывод в You:
+
+Bot: ### Workflow Summary
+
+1. **Server Health Checks:**
+   - **`prod-db-01`**:
+     - **Status:** ONLINE
+     - **CPU Usage:** 78%
+     - **Memory Usage:** 64%
+   - **`backup-node`**:
+     - **Status:** Not found (Server `'backup-node'` not found in tracking system)
+
+2. **Threshold Evaluation & Ticket Creation:**
+   - **Condition:** CPU > 80%
+   - **Outcome:** `prod-db-01` is operating at 78% CPU, which is below the 80% threshold. Therefore, no `HIGH` priority ticket was generated.
+
+3. **Report Generation:**
+   - Saved report to: `server_health_report.md` documenting server statuses, resource metrics, and findings.
+   
+   
+Да, это отличный результат — мой AI-агент отработал на 100% правильно.
+1. Вызов инструментов (Tool Use): 
+Бот сам понял, что нужно проверить 2 сервера (prod-db-01 и backup-node), и вызвал функцию проверки для каждого из них.
+
+2. Логика принятия решений:
+• На prod-db-01 нагрузка CPU составила 78%. Бот сравнил это с моим условием (> 80%), понял, что порог не превышен, и корректно не стал создавать ложный тикет с высоким приоритетом.
+• По серверу backup-node он честно зафиксировал, что такого узла нет в базе тестовых данных.
+
+Создание файла: Бот выполнил последнюю часть инструкции (save a report) и создал в папке вашего проекта реальный файл server_health_report.md — можете открыть его прямо в VS Code и посмотреть оформленный отчет.
+
+Совет для проверки тикетов: попробуй задать ему запрос с порогом ниже 78%, например: Check prod-db-01. If CPU is over 70%, open a HIGH priority ticket — тогда он должен вызвать еще и функцию создания тикета.
+
+
+
+	Теперь заменить тестовые данные серверов на реальный мониторинг (например, проверку Debian через psutil или удаленных серверов по SSH), или подключить отправку тикетов в Telegram/Jira
+	
+1. Мониторинг: научим бота проверять локальный компьютер на Debian через библиотеку psutil (если имя сервера localhost или debian), а если укажу другое имя — оставлю аккуратную заглушку (потом легко добавлю SSH).
+
+2. Тикеты: подключим отправку уведомлений о проблемах в Telegram (за 3 минуты и не требует сложной авторизации, в отличие от Jira).
+
+В папке venv/bin нет исполняемого файла pip, поэтому вызывай его как модуль через сам Python: ./venv/bin/python -m pip:
+
+	/venv/bin/python -m pip install psutil requests
+	
+
+
+
+	
+	
+
+

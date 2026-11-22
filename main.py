@@ -11,7 +11,8 @@ from ops_tools import check_server_health, create_ticket
 
 # DEFINE AUTOMATION TOOLS (Python Functions)
 
-# The AI reads the docstrings & type hints to understand WHEN & HOW to use these functions automatically.
+# The AI reads the docstrings & type hints to understand WHEN & 
+# HOW to use these functions automatically.
 
 def create_automation_ticket(title: str, priority: str, description: str) -> str:
     """ Creates a new task or support ticket in the local tracking system.

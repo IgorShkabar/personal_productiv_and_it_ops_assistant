@@ -13,7 +13,7 @@ def check_server_health(server_name: str) -> str:
     """
     name = server_name.lower().strip()
 
-    # 1. Реальная проверка вашего ноутбука на Debian
+    # 1. Реальная проверка моего ноутбука на Debian
     if name in ["localhost", "debian", "local", "igor-vostro5490"]:
         cpu = psutil.cpu_percent(interval=1)
         memory = psutil.virtual_memory().percent
